@@ -4,69 +4,86 @@ Get your 10,000 steps without walking the same loop again. just10k takes
 your location and plans a fresh walking loop sized to the steps you have
 left today.
 
-This is the **web prototype**: a mobile-friendly page for trying the idea
-on real walks before building the native iPhone/Android and watch apps.
+An Expo (React Native) app for iPhone and Android. The earlier web
+prototype lives on the `web-prototype` branch.
 
 ## What it does
 
-- **Steps → distance**: estimates stride from your height (or set your
-  stride directly), so 10,000 steps ≈ 7 km for most people.
-- **Top-up mode**: enter what you've already walked today and it plans
-  only the remainder.
-- **Three loop options + Shuffle**: each one starts and ends at your
-  location, lands within ~5% of the target, and is ranked down if it
-  doubles back on the same streets.
-- **Walk mode**: turn-by-turn instructions, a GPS step estimate,
-  progress bar, buzz before turns (Android), screen kept awake, and
-  **Re-plan the rest** if you wander off the route. It still brings you
-  home at about the target.
-- **Export**: open the loop in Google Maps or download a GPX file to load
-  on a Garmin or other watch.
+- **Knows what's left.** On iPhone it reads today's step count from the
+  phone and plans only the remainder. On Android you type it in for now.
+- **Steps to distance.** It estimates stride from your height, or you can
+  set your stride directly. For most people 10,000 steps is about 7 km.
+- **Three loop options plus Shuffle.** Each loop starts and ends where
+  you are and lands within about 5% of the target. Loops that double
+  back on the same streets are ranked lower.
+- **Walk mode.** Turn-by-turn directions with a buzz before each turn, a
+  live step count from the phone's pedometer, a progress bar, and the
+  screen kept on. If you go off route, **Re-plan the rest** plans a new
+  way home that still adds up to about your goal.
+- **Export.** Open the loop in Google Maps, or share it as a GPX file
+  for a Garmin, Strava and so on.
 
-## Run it
+## Try it on your phone
+
+1. Install **Expo Go** from the App Store or Google Play.
+2. On your computer, with Node 20+:
+   ```sh
+   npm install
+   npm start
+   ```
+3. Scan the QR code: with the Camera app on iPhone, or from inside Expo
+   Go on Android. Your phone and computer need to be on the same wifi;
+   if they aren't, run `npx expo start --tunnel`.
+
+In development builds the results screen has a **Simulate walk** button
+that replays the route at 10× speed, so you can try walk mode at your desk.
+
+## Checks
 
 ```sh
-npm start          # serves on http://localhost:8000
-npm test           # unit tests for the loop planner
+npm test           # planner, walk tracker and a full-screen smoke test
+npm run typecheck
+npm run lint
 ```
 
-Geolocation only works on `https://` or `localhost`, so to try it on
-your phone, use the GitHub Pages deploy (below) or any HTTPS host.
+## Layout
 
-Handy URL parameters:
-
-- `?demo=1`: adds a **Simulate walk** button that replays the route at
-  10× speed, so you can try walk mode from your desk.
-- `?lat=51.5072&lon=-0.1276`: start from a fixed point instead of GPS.
-- `?osrm=https://your-osrm-server/routed-foot`: use a different OSRM
-  server.
-
-## Deploy (GitHub Pages)
-
-`.github/workflows/pages.yml` runs the tests and publishes the site on
-every push to `main`. One-time setup: in the repo, **Settings → Pages →
-Build and deployment → Source: GitHub Actions**. The app is then at
-`https://<user>.github.io/just10k/`.
+| Path | What |
+| --- | --- |
+| `src/app/index.tsx` | The one screen: map plus a bottom panel that steps through setup, pick a loop, walk, done |
+| `src/components/panels.tsx` | The four panels |
+| `src/lib/loop.ts` | Loop planning and geometry (pure, unit-tested) |
+| `src/lib/walk.ts` | Follows you along the route from GPS fixes (pure, unit-tested) |
+| `src/lib/osrm.ts` | Walking routes from OSRM |
+| `src/lib/steps.ts` | Phone pedometer |
+| `src/hooks/useWalk.ts` | Wires GPS, pedometer, haptics and keep-awake into a walk |
 
 ## How loops are planned
 
-`js/loop.js` places 3–4 waypoints around a circle that passes through
-your start point, with a random rotation, direction and jitter (from a
-seed, so each Shuffle gives a new shape). It asks the router for a
-walking route through them and back to start, then scales the circle by
-`target / actual` until the distance is within 5% (usually 1–3 tries).
-Several seeds run in parallel; routes are scored on distance error plus
-how much of the route walks a street twice.
+`src/lib/loop.ts` places 3 or 4 waypoints around a circle that passes
+through your start point, with a random rotation, direction and jitter.
+These come from a seed, so each Shuffle gives a new shape. It asks the
+router for a walking route through the waypoints and back to the start,
+then scales the circle by `target / actual` until the distance is within
+5%, usually in 1 to 3 tries. Several seeds run in parallel. Each route
+is scored on its distance error plus how much of it walks a street twice.
 
 Routing uses the free OSRM foot-routing server at
-`routing.openstreetmap.de`, with OpenStreetMap tiles and Nominatim for
-address search. These public services are fine for a prototype but are
-rate-limited; a real app should self-host OSRM/GraphHopper or use a paid
-provider.
+`routing.openstreetmap.de`, and address search uses OpenStreetMap's
+Nominatim. Both are fine for a prototype but rate-limited; a released
+app should self-host OSRM/GraphHopper or use a paid provider.
 
-## Known prototype limits
+## Known limits and next steps
 
-- Steps are **estimated from GPS distance**. The browser can't read Apple
-  Health / Health Connect; the native app will.
-- No watch app yet; use GPX export for now.
-- iPhone doesn't support vibration from the web, so no turn buzz there.
+- **Screen-on tracking only.** Expo Go apps can't track location in the
+  background, so the screen stays awake during a walk. Background
+  tracking needs a development build plus `expo-task-manager`.
+- **Android step history.** Reading today's steps on Android needs Health
+  Connect, which isn't available in Expo Go. A development build with
+  `react-native-health-connect` would add it, and Apple HealthKit on iPhone.
+- **Watches.** There's no watch app yet; use GPX export for now. An Apple
+  Watch app needs native watchOS code; Wear OS and Garmin Connect IQ are
+  separate projects too.
+- **Android maps in store builds.** `react-native-maps` uses Google Maps
+  on Android. Expo Go works without setup, but your own builds need a
+  Google Maps API key in `app.json` (`android.config.googleMaps.apiKey`).

@@ -1,20 +1,38 @@
+import type { LatLon, Router, TurnStep } from "./loop";
+
 // OSRM foot-routing client. The default server is the free FOSSGIS instance
 // (routing.openstreetmap.de): fine for a prototype, but it's rate-limited
 // and has no SLA, so a real app should self-host or use a paid provider.
 
 export const DEFAULT_OSRM = "https://routing.openstreetmap.de/routed-foot";
 
-export function osrmRouter(base = DEFAULT_OSRM) {
+type OsrmStep = {
+  name: string;
+  distance: number;
+  maneuver: { type: string; modifier?: string; location: [number, number] };
+};
+
+type OsrmResponse = {
+  code: string;
+  message?: string;
+  routes: {
+    distance: number;
+    geometry: { coordinates: [number, number][] };
+    legs: { steps: OsrmStep[] }[];
+  }[];
+};
+
+export function osrmRouter(base = DEFAULT_OSRM): Router {
   return async (points) => {
     const coords = points.map(([lat, lon]) => `${lon.toFixed(6)},${lat.toFixed(6)}`).join(";");
     const url = `${base}/route/v1/foot/${coords}?overview=full&geometries=geojson&steps=true`;
-    const res = await fetch(url);
+    const res = await fetch(url, { headers: { "User-Agent": "just10k/1.0" } });
     if (!res.ok) throw new Error(`Routing server returned ${res.status}`);
-    const json = await res.json();
+    const json = (await res.json()) as OsrmResponse;
     if (json.code !== "Ok") throw new Error(json.message || json.code);
     const route = json.routes[0];
     const legs = route.legs;
-    const steps = legs.flatMap((leg, li) =>
+    const steps: TurnStep[] = legs.flatMap((leg, li) =>
       leg.steps
         // Drop the arrive/depart pairs OSRM inserts at each via-waypoint.
         .filter((s) => {
@@ -24,20 +42,20 @@ export function osrmRouter(base = DEFAULT_OSRM) {
           return true;
         })
         .map((s) => ({
-          location: [s.maneuver.location[1], s.maneuver.location[0]],
+          location: [s.maneuver.location[1], s.maneuver.location[0]] as LatLon,
           text: describe(s),
           distance: s.distance,
         }))
     );
     return {
       distance: route.distance,
-      coords: route.geometry.coordinates.map(([lon, lat]) => [lat, lon]),
+      coords: route.geometry.coordinates.map(([lon, lat]) => [lat, lon] as LatLon),
       steps,
     };
   };
 }
 
-function describe(step) {
+export function describe(step: OsrmStep): string {
   const { type, modifier } = step.maneuver;
   const road = step.name || "the path";
   if (type === "depart") return `Head out on ${road}`;

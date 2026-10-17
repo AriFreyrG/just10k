@@ -1,0 +1,42 @@
+{
+  "expo": {
+    "name": "just10k",
+    "slug": "just10k",
+    "scheme": "just10k",
+    "version": "0.1.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "automatic",
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.arifreyrg.just10k"
+    },
+    "android": {
+      "package": "com.arifreyrg.just10k",
+      "permissions": ["ACCESS_FINE_LOCATION", "ACCESS_COARSE_LOCATION", "ACTIVITY_RECOGNITION"],
+      "adaptiveIcon": {
+        "backgroundColor": "#0f766e",
+        "foregroundImage": "./assets/android-icon-foreground.png",
+        "backgroundImage": "./assets/android-icon-background.png",
+        "monochromeImage": "./assets/android-icon-monochrome.png"
+      },
+      "predictiveBackGestureEnabled": false
+    },
+    "plugins": [
+      "expo-router",
+      "expo-sharing",
+      [
+        "expo-location",
+        {
+          "locationWhenInUsePermission": "just10k uses your location to plan a walking loop from where you are and to guide you around it."
+        }
+      ],
+      [
+        "expo-sensors",
+        {
+          "motionPermission": "just10k reads your step count so it can plan a walk for the steps you have left today."
+        }
+      ]
+    ]
+  }
+}

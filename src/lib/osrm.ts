@@ -45,6 +45,9 @@ export function osrmRouter(base = DEFAULT_OSRM): Router {
           location: [s.maneuver.location[1], s.maneuver.location[0]] as LatLon,
           text: describe(s),
           distance: s.distance,
+          road: s.name,
+          turn: s.maneuver.modifier,
+          arrive: s.maneuver.type === "arrive",
         }))
     );
     return {

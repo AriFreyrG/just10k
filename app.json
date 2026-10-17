@@ -13,7 +13,11 @@
     },
     "android": {
       "package": "com.arifreyrg.just10k",
-      "permissions": ["ACCESS_FINE_LOCATION", "ACCESS_COARSE_LOCATION", "ACTIVITY_RECOGNITION"],
+      "permissions": [
+        "ACCESS_FINE_LOCATION",
+        "ACCESS_COARSE_LOCATION",
+        "ACTIVITY_RECOGNITION"
+      ],
       "adaptiveIcon": {
         "backgroundColor": "#0f766e",
         "foregroundImage": "./assets/android-icon-foreground.png",
@@ -36,7 +40,8 @@
         {
           "motionPermission": "just10k reads your step count so it can plan a walk for the steps you have left today."
         }
-      ]
+      ],
+      "expo-font"
     ]
   }
 }

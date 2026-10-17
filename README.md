@@ -7,6 +7,15 @@ left today.
 An Expo (React Native) app for iPhone and Android. The earlier web
 prototype lives on the `web-prototype` branch.
 
+## Design
+
+The UI follows the **[just10k UI](https://claude.ai/artifact/LmbKPaG5n23bGpCdyWZ7fT)**
+design canvas: four phone screens (Steps left, Pick a loop, Walking, Done).
+It builds on the directions in
+**[just10k design ideas](https://claude.ai/artifact/56T2feuU2Er8qVdqfucbNv)**.
+Colours and fonts (Bricolage Grotesque for numbers and headings, Figtree
+for text) live in `src/theme.ts`.
+
 ## What it does
 
 - **Knows what's left.** On iPhone it reads today's step count from the
@@ -35,7 +44,7 @@ prototype lives on the `web-prototype` branch.
    Go on Android. Your phone and computer need to be on the same wifi;
    if they aren't, run `npx expo start --tunnel`.
 
-In development builds the results screen has a **Simulate walk** button
+In development builds the pick-a-loop screen has a **Simulate walk** button
 that replays the route at 10× speed, so you can try walk mode at your desk.
 
 ## Checks
@@ -50,8 +59,13 @@ npm run lint
 
 | Path | What |
 | --- | --- |
-| `src/app/index.tsx` | The one screen: map plus a bottom panel that steps through setup, pick a loop, walk, done |
-| `src/components/panels.tsx` | The four panels |
+| `src/app/index.tsx` | The one screen: a map with the four phases (setup, pick, walk, done) drawn over it |
+| `src/components/SetupScreen.tsx` | Steps left, with the settings, start-point and set-time sheets |
+| `src/components/PickOverlay.tsx` | Swipeable loop cards over the map |
+| `src/components/WalkOverlay.tsx` | Turn card and step progress during a walk |
+| `src/components/DoneScreen.tsx` | The finished loop as a stamp |
+| `src/components/ui.tsx` | Buttons, pills, sheets and icons |
+| `src/lib/describe.ts` | Loop names and tags from street names, plus date labels |
 | `src/lib/loop.ts` | Loop planning and geometry (pure, unit-tested) |
 | `src/lib/walk.ts` | Follows you along the route from GPS fixes (pure, unit-tested) |
 | `src/lib/osrm.ts` | Walking routes from OSRM |

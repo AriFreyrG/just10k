@@ -9,7 +9,12 @@ jest.mock("@react-native-async-storage/async-storage", () =>
 );
 jest.mock("react-native-safe-area-context", () => require("react-native-safe-area-context/jest/mock").default);
 jest.mock("expo-keep-awake", () => ({ useKeepAwake: () => {} }));
-jest.mock("expo-haptics", () => ({ notificationAsync: jest.fn(), NotificationFeedbackType: { Warning: "warning" } }));
+jest.mock("expo-haptics", () => ({
+  notificationAsync: jest.fn(),
+  impactAsync: jest.fn(),
+  NotificationFeedbackType: { Warning: "warning" },
+  ImpactFeedbackStyle: { Light: "light" },
+}));
 jest.mock("expo-sharing", () => ({ shareAsync: jest.fn() }));
 jest.mock("expo-file-system", () => ({ File: jest.fn(), Paths: { cache: "/cache" } }));
 jest.mock("expo-sensors", () => ({ Pedometer: { isAvailableAsync: async () => false } }));
@@ -53,33 +58,39 @@ beforeEach(() => {
 
 test("plan a loop, pick one, simulate the walk to the end", async () => {
   await render(<Home />);
-  await screen.findByText("Start: your location");
-  expect(screen.getByText(/≈/)).toHaveTextContent(/10,000 steps ≈ 7\.0 km/);
+  await screen.findByText("Where you are now");
+  expect(screen.getByText("steps to go")).toBeTruthy();
+  expect(screen.getByText("10,000")).toBeTruthy();
+  expect(screen.getByText("≈ 7.0 km")).toBeTruthy();
 
-  await fireEvent.press(screen.getByText("Plan my walk"));
-  await screen.findByText(/Target: 10,000 steps/);
-  expect(screen.getAllByRole("radio")).toHaveLength(3);
-  expect(screen.getAllByTestId("polyline")).toHaveLength(3);
+  await fireEvent.press(screen.getByText("Find me a loop"));
+  await screen.findByText("Loop 1 of 3");
+  // The picked loop is drawn twice (casing + line), the other two as ghosts.
+  expect(screen.getAllByTestId("polyline")).toHaveLength(4);
+  expect(screen.getAllByText("Start St & Park Rd")).toHaveLength(3);
 
   // Each option should land within 5% of the target.
-  for (const opt of screen.getAllByText(/^[\d,]+$/)) {
+  const options = screen.getAllByTestId("loop-steps");
+  expect(options).toHaveLength(3);
+  for (const opt of options) {
     const steps = Number(String(opt.props.children).replace(/,/g, ""));
     expect(Math.abs(steps - 10000) / 10000).toBeLessThan(0.05);
   }
 
-  await fireEvent.press(screen.getAllByRole("radio")[1]);
-  expect(screen.getAllByRole("radio")[1]).toBeChecked();
-
   jest.useFakeTimers();
   await fireEvent.press(screen.getByText("Simulate walk"));
   expect(screen.getByText("End walk")).toBeTruthy();
-  expect(screen.getAllByTestId("polyline")).toHaveLength(1);
-  for (let i = 0; i < 600 && !screen.queryByText("Plan another"); i++) {
+  expect(screen.getByText(/of 10,000 steps/)).toBeTruthy();
+  for (let i = 0; i < 600 && !screen.queryByText("Back to start"); i++) {
     await act(async () => {
       jest.advanceTimersByTime(1000);
     });
   }
   jest.useRealTimers();
-  await waitFor(() => expect(screen.getByText("Plan another")).toBeTruthy());
-  expect(screen.getByText(/this walk\./)).toHaveTextContent(/About [\d,]+ steps \([\d.]+ km\) this walk\. [\d,]+ today\./);
+  await waitFor(() => expect(screen.getByText("Back to start")).toBeTruthy());
+  expect(screen.getByText("this walk")).toBeTruthy();
+  expect(screen.getByText(/steps today\./)).toBeTruthy();
+
+  await fireEvent.press(screen.getByText("Back to start"));
+  expect(screen.getByText("Find me a loop")).toBeTruthy();
 });

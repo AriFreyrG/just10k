@@ -9,7 +9,10 @@
     "userInterfaceStyle": "automatic",
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.arifreyrg.just10k"
+      "bundleIdentifier": "com.arifreyrg.just10k",
+      "config": {
+        "usesNonExemptEncryption": false
+      }
     },
     "android": {
       "package": "com.arifreyrg.just10k",
@@ -42,6 +45,12 @@
         }
       ],
       "expo-font"
-    ]
+    ],
+    "owner": "arifreyrg",
+    "extra": {
+      "eas": {
+        "projectId": "b0318847-a936-418b-8d84-2c6528bc9a09"
+      }
+    }
   }
 }

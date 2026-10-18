@@ -9,7 +9,7 @@ import { SetupScreen } from "../components/SetupScreen";
 import { WalkOverlay } from "../components/WalkOverlay";
 import { loopName } from "../lib/describe";
 import { geocode } from "../lib/geocode";
-import { planOptions, stepsToMeters, strideFromHeight, type LatLon, type PlannedRoute } from "../lib/loop";
+import { planOptions, stepsToMeters, stepsToMinutes, strideFromHeight, type LatLon, type PlannedRoute } from "../lib/loop";
 import { osrmRouter } from "../lib/osrm";
 import { DEFAULTS, loadSettings, saveSettings, type Settings } from "../lib/settings";
 import { shareGpx } from "../lib/share";
@@ -145,14 +145,15 @@ export default function Home() {
           coords: walkRoute.coords,
           steps,
           meters,
-          minutes: Math.max(1, Math.round((Date.now() - walkStartedAt) / 60000)),
+          // A simulated walk runs at ~10x speed, so report the time it would take on foot.
+          minutes: simulate ? stepsToMinutes(steps) : Math.max(1, Math.round((Date.now() - walkStartedAt) / 60000)),
           today,
           goal,
         });
         return "done";
       });
     },
-    [settings, updateSettings, walkRoute, walkStartedAt, options, selected, goal]
+    [settings, updateSettings, walkRoute, walkStartedAt, options, selected, goal, simulate]
   );
 
   // Selected loop on top, with a white casing; the others as grey dotted ghosts.

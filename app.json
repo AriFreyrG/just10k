@@ -3,15 +3,20 @@
     "name": "just10k",
     "slug": "just10k",
     "scheme": "just10k",
-    "version": "0.1.0",
+    "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "automatic",
     "ios": {
-      "supportsTablet": true,
+      "supportsTablet": false,
       "bundleIdentifier": "com.arifreyrg.just10k",
       "config": {
         "usesNonExemptEncryption": false
+      },
+      "icon": {
+        "light": "./assets/icon.png",
+        "dark": "./assets/icon-dark.png",
+        "tinted": "./assets/icon-tinted.png"
       }
     },
     "android": {
@@ -22,10 +27,10 @@
         "ACTIVITY_RECOGNITION"
       ],
       "adaptiveIcon": {
-        "backgroundColor": "#0f766e",
+        "backgroundColor": "#F0642E",
         "foregroundImage": "./assets/android-icon-foreground.png",
-        "backgroundImage": "./assets/android-icon-background.png",
-        "monochromeImage": "./assets/android-icon-monochrome.png"
+        "monochromeImage": "./assets/android-icon-monochrome.png",
+        "backgroundImage": "./assets/android-icon-background.png"
       },
       "predictiveBackGestureEnabled": false
     },
@@ -44,7 +49,20 @@
           "motionPermission": "just10k reads your step count so it can plan a walk for the steps you have left today."
         }
       ],
-      "expo-font"
+      "expo-font",
+      [
+        "expo-splash-screen",
+        {
+          "backgroundColor": "#F0642E",
+          "image": "./assets/splash-icon.png",
+          "imageWidth": 150,
+          "resizeMode": "contain",
+          "dark": {
+            "backgroundColor": "#121814",
+            "image": "./assets/splash-icon-dark.png"
+          }
+        }
+      ]
     ],
     "owner": "arifreyrg",
     "extra": {

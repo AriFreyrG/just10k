@@ -147,9 +147,11 @@ const stroke = (color: string, width = 2) =>
   ({ fill: "none", stroke: color, strokeWidth: width, strokeLinecap: "round", strokeLinejoin: "round" }) as const;
 
 export const Icon = {
+  // The app icon's "nearly there" ring, about 84% closed.
   Logo: ({ color, size = 22 }: IconProps) => (
     <Svg width={size} height={size} viewBox="0 0 24 24">
-      <Path d="M7 18 C 2 15, 3 6, 10 5 S 22 7, 20 14 S 12 21, 7 18 Z" {...stroke(color, 3)} />
+      <Circle cx="12" cy="12" r="8.5" {...stroke(color, 3.4)} strokeOpacity={0.25} />
+      <Circle cx="12" cy="12" r="8.5" {...stroke(color, 3.4)} strokeDasharray="45 54" transform="rotate(-90 12 12)" />
     </Svg>
   ),
   Sliders: ({ color, size = 20 }: IconProps) => (

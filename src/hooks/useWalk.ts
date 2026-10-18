@@ -36,12 +36,18 @@ export function useWalk({ route, home, goalM, router, simulate = false }: Option
     if (simulate) {
       const cum = cumulative(tracker.route.coords);
       let m = 0;
+      let last = 0;
       const timer = setInterval(() => {
         m += 14;
         const coords = tracker.route.coords;
-        const i = cum.findIndex((c) => c >= m);
-        onFix(coords[i < 0 ? coords.length - 1 : i], 5);
-        if (i < 0) clearInterval(timer);
+        const found = cum.findIndex((c) => c >= m);
+        const i = found < 0 ? coords.length - 1 : found;
+        // Pass through every route point on the way, so the odometer follows
+        // the real path instead of cutting corners between fixes.
+        for (let j = last + 1; j < i; j++) tracker.update(coords[j], 5);
+        last = i;
+        onFix(coords[i], 5);
+        if (found < 0) clearInterval(timer);
       }, 1000);
       cleanups.push(() => clearInterval(timer));
     } else {

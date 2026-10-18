@@ -1,0 +1,54 @@
+{
+  "configVersion": 0,
+  "apple": {
+    "version": "1.0.0",
+    "copyright": "2026 Ari Guðmundsson",
+    "categories": [
+      "HEALTH_AND_FITNESS",
+      "NAVIGATION"
+    ],
+    "advisory": {
+      "alcoholTobaccoOrDrugUseOrReferences": "NONE",
+      "contests": "NONE",
+      "gambling": false,
+      "gamblingSimulated": "NONE",
+      "horrorOrFearThemes": "NONE",
+      "kidsAgeBand": null,
+      "matureOrSuggestiveThemes": "NONE",
+      "medicalOrTreatmentInformation": "NONE",
+      "profanityOrCrudeHumor": "NONE",
+      "sexualContentGraphicAndNudity": "NONE",
+      "sexualContentOrNudity": "NONE",
+      "unrestrictedWebAccess": false,
+      "violenceCartoonOrFantasy": "NONE",
+      "violenceRealistic": "NONE",
+      "violenceRealisticProlongedGraphicOrSadistic": "NONE",
+      "ageRatingOverride": "NONE",
+      "koreaAgeRatingOverride": "NONE"
+    },
+    "info": {
+      "en-US": {
+        "title": "just10k",
+        "subtitle": "A new walking loop every day",
+        "promoText": "Short of your step goal? just10k plans a fresh walking loop from your door, sized to exactly the steps you have left today.",
+        "description": "Get your 10,000 steps without walking the same loop again.\n\njust10k looks at how many steps you have left today and plans a walking loop from where you are, sized to match. It starts and ends at your door, so you always finish at home.\n\nKNOWS WHAT'S LEFT\njust10k reads today's step count from your iPhone and plans only the remainder. Set your own daily goal if 10,000 isn't yours.\n\nA FRESH LOOP EVERY TIME\nGet three loops to pick from, each sized to the distance you need. Swipe between them, or shuffle for new ones. Loops that double back on the same streets are ranked lower.\n\nSHORT ON TIME?\nPick 15, 30 or 60 minutes instead, and just10k plans a loop that fits.\n\nTURN BY TURN\nWalk mode shows the next turn in big type, buzzes before each turn, and counts your steps as you go. The part you've walked fades out. Take a wrong turn and just10k can re-plan a new way home that still adds up to your goal.\n\nYOUR LOOP, SAVED\nWhen you finish, see the shape of today's loop with your steps, distance and time. Share it as a GPX file for Strava, Garmin and more, or open the route in Google Maps.\n\nPRIVATE BY DESIGN\nNo account and no tracking. Your step count stays on your phone.\n\nRoutes are planned with OpenStreetMap data. Map data © OpenStreetMap contributors.",
+        "keywords": [
+          "walk",
+          "steps",
+          "10000",
+          "pedometer",
+          "step counter",
+          "walking route",
+          "loop",
+          "route planner",
+          "daily goal",
+          "fitness"
+        ],
+        "releaseNotes": "First release.",
+        "marketingUrl": "https://github.com/AriFreyrG/just10k",
+        "supportUrl": "https://github.com/AriFreyrG/just10k/issues",
+        "privacyPolicyUrl": "https://github.com/AriFreyrG/just10k/blob/main/PRIVACY.md"
+      }
+    }
+  }
+}

@@ -103,6 +103,8 @@ export function PickOverlay(p: Props) {
             <Button kind="quiet" title="Share GPX" onPress={() => shareGpx(sel)} />
             {__DEV__ && <Button kind="quiet" title="Simulate walk" onPress={() => p.onStart(true)} />}
           </View>
+          {/* Routes and street names come from OpenStreetMap, whose licence asks for this credit. */}
+          <Text style={[styles.credit, { color: t.muted }]}>Routes © OpenStreetMap contributors</Text>
         </View>
       </View>
     </>
@@ -150,4 +152,5 @@ const styles = StyleSheet.create({
   row: { flexDirection: "row", gap: 10 },
   shuffle: { width: 58, height: 58, paddingHorizontal: 0, gap: 0 },
   links: { flexDirection: "row", justifyContent: "center", marginTop: -6 },
+  credit: { fontSize: 11, fontFamily: font.body, textAlign: "center", marginTop: -10 },
 });

@@ -13,6 +13,12 @@
     },
     "production": {
       "autoIncrement": true
+    },
+    "development-simulator": {
+      "extends": "development",
+      "ios": {
+        "simulator": true
+      }
     }
   },
   "submit": {

@@ -4,6 +4,7 @@ import Svg, { Circle, Path } from "react-native-svg";
 import { routeShape, shortDate } from "../lib/describe";
 import type { LatLon } from "../lib/loop";
 import { fmt, font, km, useTheme } from "../theme";
+import { AdBanner } from "./AdBanner";
 import { Button, Icon, RoundButton } from "./ui";
 
 export type WalkSummary = {
@@ -59,6 +60,7 @@ export function DoneScreen({ summary: s, onShare, onClose }: Props) {
       </View>
 
       <View style={{ flex: 1 }} />
+      <AdBanner />
 
       <View style={styles.actions}>
         <Button title="Share my loop" onPress={onShare} icon={<Icon.Share color={t.primaryFg} />} />
@@ -89,5 +91,5 @@ const styles = StyleSheet.create({
   stat: { flex: 1, alignItems: "center" },
   statValue: { fontSize: 18, fontFamily: font.bodyBold, fontVariant: ["tabular-nums"] },
   statLabel: { fontSize: 13, fontFamily: font.body },
-  actions: { alignSelf: "stretch", gap: 8 },
+  actions: { alignSelf: "stretch", gap: 8, marginTop: 12 },
 });

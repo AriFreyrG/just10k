@@ -87,6 +87,19 @@ Routing uses the free OSRM foot-routing server at
 Nominatim. Both are fine for a prototype but rate-limited; a released
 app should self-host OSRM/GraphHopper or use a paid provider.
 
+## Ads
+
+A non-personalized Google AdMob banner shows on the Done screen (never during a
+walk). `src/lib/ads.ts` runs Google's consent form where the law needs it, then
+starts the SDK. The SDK needs a development or store build; in Expo Go the app
+runs without ads.
+
+Before release, put your AdMob app IDs in the `react-native-google-mobile-ads`
+plugin in `app.json` (they're Google's samples now) and set the banner's ad unit
+ID as `EXPO_PUBLIC_ADMOB_BANNER_IOS` (for example as an EAS environment
+variable). Development builds use Google's test ads; a release build without a
+unit ID shows no ads.
+
 ## Known limits and next steps
 
 - **Screen-on tracking only.** Expo Go apps can't track location in the

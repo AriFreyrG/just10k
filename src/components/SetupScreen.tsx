@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import Svg, { Circle } from "react-native-svg";
+import { showPrivacyChoices, useAds } from "../lib/ads";
 import { dayPart } from "../lib/describe";
 import { stepsToMeters, stepsToMinutes } from "../lib/loop";
 import type { Settings } from "../lib/settings";
@@ -135,6 +136,7 @@ const num = (v: string) => Number(v.replace(/[^0-9]/g, "")) || 0;
 
 function SettingsSheet(p: Props & { visible: boolean; onClose: () => void }) {
   const s = p.settings;
+  const { privacyOptions } = useAds();
   return (
     <Sheet visible={p.visible} title="Settings" onClose={p.onClose}>
       <View style={styles.row}>
@@ -159,6 +161,7 @@ function SettingsSheet(p: Props & { visible: boolean; onClose: () => void }) {
           onChangeText={(v) => p.onChange({ ...s, strideCm: num(v) || null })}
         />
       </View>
+      {privacyOptions && <Button kind="soft" title="Ad privacy choices" onPress={showPrivacyChoices} />}
     </Sheet>
   );
 }

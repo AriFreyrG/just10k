@@ -2,7 +2,7 @@
 
 Last updated: 18 October 2026
 
-just10k plans walking loops. It has no accounts, no ads and no analytics, and the developer does not collect or store any of your data.
+just10k plans walking loops. It has no accounts and no analytics, and the developer does not collect or store any of your data. It shows a small ad after a walk, served by Google AdMob, which is described below.
 
 ## What the app uses and why
 
@@ -16,6 +16,8 @@ The app only asks for location while it is open. It does not track your location
 **Motion and fitness (step count).** just10k reads your step count from your iPhone to work out how many steps you have left today and to count steps during a walk. This stays on your phone and is never sent anywhere.
 
 **Settings.** Your step goal, height, stride and today's walked steps are saved on your phone only.
+
+**Ads.** After a walk, just10k shows a banner ad from Google AdMob. The ads are not personalized, and the app never asks to track you across other apps, so Google does not use your advertising identifier. To serve and measure ads and to prevent fraud, Google's SDK receives information such as your device type, app version, IP address (and the rough location it implies) and how you interact with the ad. In the EEA, the UK and Switzerland, the app asks for your consent before any ads load, and you can change your choice under Settings › Ad privacy choices. Google's use of this data is covered by its own policy: https://policies.google.com/technologies/partner-sites
 
 ## Sharing
 

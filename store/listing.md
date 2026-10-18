@@ -57,7 +57,7 @@ Secondary: Navigation
 
 - Support URL: https://github.com/AriFreyrG/just10k/issues
 - Marketing URL: https://github.com/AriFreyrG/just10k
-- Privacy Policy URL: https://github.com/AriFreyrG/just10k/blob/main/PRIVACY.md
+- Privacy Policy URL: https://arisphere.net/privacy
 
 ## Age rating
 

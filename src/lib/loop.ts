@@ -7,6 +7,9 @@ export type TurnStep = {
   location: LatLon;
   text: string;
   distance: number;
+  road?: string; // street walked after this turn ("" for an unnamed path)
+  turn?: string; // OSRM maneuver modifier: "left", "slight right", "uturn"...
+  arrive?: boolean;
 };
 
 export type RouteResult = {

@@ -3,22 +3,34 @@
     "name": "just10k",
     "slug": "just10k",
     "scheme": "just10k",
-    "version": "0.1.0",
+    "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "automatic",
     "ios": {
-      "supportsTablet": true,
-      "bundleIdentifier": "com.arifreyrg.just10k"
+      "supportsTablet": false,
+      "bundleIdentifier": "com.arifreyrg.just10k",
+      "config": {
+        "usesNonExemptEncryption": false
+      },
+      "icon": {
+        "light": "./assets/icon.png",
+        "dark": "./assets/icon-dark.png",
+        "tinted": "./assets/icon-tinted.png"
+      }
     },
     "android": {
       "package": "com.arifreyrg.just10k",
-      "permissions": ["ACCESS_FINE_LOCATION", "ACCESS_COARSE_LOCATION", "ACTIVITY_RECOGNITION"],
+      "permissions": [
+        "ACCESS_FINE_LOCATION",
+        "ACCESS_COARSE_LOCATION",
+        "ACTIVITY_RECOGNITION"
+      ],
       "adaptiveIcon": {
-        "backgroundColor": "#0f766e",
+        "backgroundColor": "#F0642E",
         "foregroundImage": "./assets/android-icon-foreground.png",
-        "backgroundImage": "./assets/android-icon-background.png",
-        "monochromeImage": "./assets/android-icon-monochrome.png"
+        "monochromeImage": "./assets/android-icon-monochrome.png",
+        "backgroundImage": "./assets/android-icon-background.png"
       },
       "predictiveBackGestureEnabled": false
     },
@@ -36,7 +48,38 @@
         {
           "motionPermission": "just10k reads your step count so it can plan a walk for the steps you have left today."
         }
+      ],
+      "expo-font",
+      [
+        "expo-splash-screen",
+        {
+          "backgroundColor": "#F0642E",
+          "image": "./assets/splash-icon.png",
+          "imageWidth": 150,
+          "resizeMode": "contain",
+          "dark": {
+            "backgroundColor": "#121814",
+            "image": "./assets/splash-icon-dark.png"
+          }
+        }
+      ],
+      [
+        "react-native-google-mobile-ads",
+        {
+          "iosAppId": "ca-app-pub-7458431469009615~7236028501",
+          "androidAppId": "ca-app-pub-3940256099942544~3347511713",
+          "delayAppMeasurementInit": true,
+          "skAdNetworkItems": [
+            "cstr6suwn9.skadnetwork"
+          ]
+        }
       ]
-    ]
+    ],
+    "owner": "arifreyrg",
+    "extra": {
+      "eas": {
+        "projectId": "b0318847-a936-418b-8d84-2c6528bc9a09"
+      }
+    }
   }
 }

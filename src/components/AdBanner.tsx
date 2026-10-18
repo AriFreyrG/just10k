@@ -7,16 +7,21 @@ import { ads, BANNER_ID, useAds } from "../lib/ads";
 export function AdBanner() {
   const { ready } = useAds();
   const [failed, setFailed] = useState(false);
+  const [width, setWidth] = useState(0);
   if (!ads || !ready || !BANNER_ID || failed) return null;
   const { BannerAd, BannerAdSize } = ads;
   return (
-    <View style={styles.wrap}>
-      <BannerAd
-        unitId={BANNER_ID}
-        size={BannerAdSize.LARGE_ANCHORED_ADAPTIVE_BANNER}
-        requestOptions={{ requestNonPersonalizedAdsOnly: true }}
-        onAdFailedToLoad={() => setFailed(true)}
-      />
+    // Size the ad to the space it has, not the full screen, so it isn't clipped by the screen's padding.
+    <View style={styles.wrap} onLayout={(e) => setWidth(Math.floor(e.nativeEvent.layout.width))}>
+      {width > 0 && (
+        <BannerAd
+          unitId={BANNER_ID}
+          size={BannerAdSize.LARGE_ANCHORED_ADAPTIVE_BANNER}
+          width={width}
+          requestOptions={{ requestNonPersonalizedAdsOnly: true }}
+          onAdFailedToLoad={() => setFailed(true)}
+        />
+      )}
     </View>
   );
 }

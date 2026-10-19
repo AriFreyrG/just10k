@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { StyleSheet, View } from "react-native";
-import { ads, BANNER_ID, useAds } from "../lib/ads";
+import { ads, BANNER_ID, reportError, useAds } from "../lib/ads";
 
 // A non-personalized adaptive banner. Renders nothing until consent is settled,
 // in Expo Go, or when there's no ad unit, and collapses if no ad fills.
@@ -19,7 +19,10 @@ export function AdBanner() {
           size={BannerAdSize.LARGE_ANCHORED_ADAPTIVE_BANNER}
           width={width}
           requestOptions={{ requestNonPersonalizedAdsOnly: true }}
-          onAdFailedToLoad={() => setFailed(true)}
+          onAdFailedToLoad={(e) => {
+            reportError("banner", e);
+            setFailed(true);
+          }}
         />
       )}
     </View>

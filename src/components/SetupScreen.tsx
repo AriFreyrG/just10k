@@ -134,11 +134,13 @@ export function SetupScreen(p: Props) {
   );
 }
 
+const yesNo = (v: boolean | null) => (v == null ? "–" : v ? "yes" : "no");
 const num = (v: string) => Number(v.replace(/[^0-9]/g, "")) || 0;
 
 function SettingsSheet(p: Props & { visible: boolean; onClose: () => void }) {
   const s = p.settings;
-  const { privacyOptions } = useAds();
+  const t = useTheme();
+  const ad = useAds();
   return (
     <Sheet visible={p.visible} title="Settings" onClose={p.onClose}>
       <View style={styles.row}>
@@ -163,7 +165,11 @@ function SettingsSheet(p: Props & { visible: boolean; onClose: () => void }) {
           onChangeText={(v) => p.onChange({ ...s, strideCm: num(v) || null })}
         />
       </View>
-      {privacyOptions && <Button kind="soft" title="Ad privacy choices" onPress={showPrivacyChoices} />}
+      {ad.privacyOptions && <Button kind="soft" title="Ad privacy choices" onPress={showPrivacyChoices} />}
+      <Text style={[styles.adStatus, { color: t.muted }]} selectable>
+        Ads: consent {ad.consentStatus ?? "–"} · GDPR {yesNo(ad.gdprApplies)} · can request {yesNo(ad.canRequestAds)}
+        {ad.lastError ? ` · ${ad.lastError}` : ""}
+      </Text>
     </Sheet>
   );
 }
@@ -226,4 +232,5 @@ const styles = StyleSheet.create({
   row: { flexDirection: "row", gap: 12 },
   times: { flexDirection: "row", flexWrap: "wrap", gap: 10 },
   time: { flexGrow: 1, minWidth: "28%" },
+  adStatus: { fontSize: 12, fontFamily: font.body },
 });

@@ -11,7 +11,7 @@ import { loopName } from "../lib/describe";
 import { geocode } from "../lib/geocode";
 import { planOptions, stepsToMeters, stepsToMinutes, strideFromHeight, type LatLon, type PlannedRoute } from "../lib/loop";
 import { osrmRouter } from "../lib/osrm";
-import { DEFAULTS, loadSettings, saveSettings, type Settings } from "../lib/settings";
+import { DEFAULTS, loadSettings, nextMilestone, saveSettings, type Settings } from "../lib/settings";
 import { shareGpx } from "../lib/share";
 import { stepsToday } from "../lib/steps";
 import { useTheme } from "../theme";
@@ -58,7 +58,9 @@ export default function Home() {
 
   const strideM = settings.strideCm ? settings.strideCm / 100 : strideFromHeight(settings.heightCm || 170);
   const goal = settings.goal || 10000;
-  const stepsLeft = Math.max(500, goal - settings.doneToday);
+  // Past the goal, aim for the next multiple of it (20k, 30k…) rather than stopping.
+  const milestone = nextMilestone(settings.doneToday, goal);
+  const stepsLeft = Math.max(500, milestone - settings.doneToday);
 
   const updateSettings = useCallback((s: Settings) => {
     setSettings(s);
@@ -222,6 +224,7 @@ export default function Home() {
           settings={settings}
           onChange={updateSettings}
           stepsLeft={stepsLeft}
+          milestone={milestone}
           strideM={strideM}
           autoSteps={autoSteps}
           startLabel={startLabel}
@@ -294,6 +297,11 @@ export default function Home() {
             setSimulate(false);
             setPhase("setup");
           }}
+          onNext={() => {
+            setSimulate(false);
+            plan(stepsLeft);
+          }}
+          planning={planning}
         />
       )}
     </View>

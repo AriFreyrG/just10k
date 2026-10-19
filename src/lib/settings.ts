@@ -35,3 +35,9 @@ export async function saveSettings(s: Settings) {
     await AsyncStorage.setItem(KEY, JSON.stringify({ ...s, doneDate: today() }));
   } catch {}
 }
+
+/** The next multiple of the daily goal still ahead: 10k, then 20k, 30k… */
+export const nextMilestone = (done: number, goal: number) => goal * (Math.floor(done / goal) + 1);
+
+/** "20k" for round thousands, "12,500" otherwise. */
+export const milestoneLabel = (n: number) => (n % 1000 === 0 ? `${n / 1000}k` : Math.round(n).toLocaleString());

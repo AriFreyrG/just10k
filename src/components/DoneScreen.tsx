@@ -3,6 +3,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import Svg, { Circle, Path } from "react-native-svg";
 import { routeShape, shortDate } from "../lib/describe";
 import type { LatLon } from "../lib/loop";
+import { milestoneLabel, nextMilestone } from "../lib/settings";
 import { fmt, font, km, useTheme } from "../theme";
 import { AdBanner } from "./AdBanner";
 import { Button, Icon, RoundButton } from "./ui";
@@ -17,17 +18,19 @@ export type WalkSummary = {
   goal: number;
 };
 
-type Props = { summary: WalkSummary; onShare: () => void; onClose: () => void };
+type Props = { summary: WalkSummary; onShare: () => void; onClose: () => void; onNext: () => void; planning: boolean };
 
 const STAMP = 250;
 
 // 4 · Done: today's loop as a stamp.
-export function DoneScreen({ summary: s, onShare, onClose }: Props) {
+export function DoneScreen({ summary: s, onShare, onClose, onNext, planning }: Props) {
   const t = useTheme();
   const insets = useSafeAreaInsets();
   const pts = routeShape(s.coords, STAMP, STAMP, 46);
   const d = pts.map((p, i) => `${i ? "L" : "M"}${p.x.toFixed(1)} ${p.y.toFixed(1)}`).join(" ");
-  const left = s.goal - s.today;
+  // Did this walk carry the day past the goal (or 20k, 30k…)? Then offer the next one.
+  const next = nextMilestone(s.today, s.goal);
+  const crossed = Math.floor(s.today / s.goal) > Math.floor((s.today - s.steps) / s.goal);
 
   return (
     <View style={[styles.screen, { backgroundColor: t.bg, paddingTop: insets.top + 12, paddingBottom: insets.bottom + 12 }]}>
@@ -50,7 +53,7 @@ export function DoneScreen({ summary: s, onShare, onClose }: Props) {
       </Text>
       <Text style={[styles.total, { color: t.fg }]}>{fmt(s.today)}</Text>
       <Text style={[styles.cheer, { color: t.fgSoft }]}>
-        {left <= 0 ? "steps today. Nicely done." : `steps today. ${fmt(left)} to go.`}
+        {crossed ? `steps today. Nicely done. Up for ${milestoneLabel(next)}?` : `steps today. ${fmt(next - s.today)} to go.`}
       </Text>
 
       <View style={[styles.stats, { backgroundColor: t.card }]}>
@@ -63,7 +66,20 @@ export function DoneScreen({ summary: s, onShare, onClose }: Props) {
       <AdBanner />
 
       <View style={styles.actions}>
-        <Button title="Share my loop" onPress={onShare} icon={<Icon.Share color={t.primaryFg} />} />
+        {crossed && (
+          <Button
+            title={`Find me a ${milestoneLabel(next)} loop`}
+            onPress={onNext}
+            busy={planning}
+            iconAfter={<Icon.Arrow color={t.primaryFg} />}
+          />
+        )}
+        <Button
+          kind={crossed ? "soft" : "primary"}
+          title="Share my loop"
+          onPress={onShare}
+          icon={<Icon.Share color={crossed ? t.fg : t.primaryFg} />}
+        />
         <Button kind="quiet" title="Back to start" onPress={onClose} />
       </View>
     </View>

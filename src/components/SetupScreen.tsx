@@ -5,7 +5,7 @@ import Svg, { Circle } from "react-native-svg";
 import { showPrivacyChoices, useAds } from "../lib/ads";
 import { dayPart } from "../lib/describe";
 import { stepsToMeters, stepsToMinutes } from "../lib/loop";
-import type { Settings } from "../lib/settings";
+import { milestoneLabel, type Settings } from "../lib/settings";
 import { fmt, font, km, useTheme } from "../theme";
 import { Button, Field, Icon, Label, Pill, RoundButton, Sheet } from "./ui";
 
@@ -13,6 +13,7 @@ type Props = {
   settings: Settings;
   onChange: (s: Settings) => void;
   stepsLeft: number;
+  milestone: number; // the goal, or 20k, 30k… once it's reached
   strideM: number;
   autoSteps: boolean; // today's steps came from the phone
   startLabel: string;
@@ -35,8 +36,9 @@ export function SetupScreen(p: Props) {
   const insets = useSafeAreaInsets();
   const [sheet, setSheet] = useState<"settings" | "start" | "time" | null>(null);
   const goal = p.settings.goal || 10000;
-  const progress = Math.min(1, p.settings.doneToday / goal);
-  const reached = p.settings.doneToday >= goal;
+  const reached = p.milestone > goal;
+  // The ring fills once per goal-sized lap, so it starts over on the way to 20k.
+  const progress = Math.min(1, (p.settings.doneToday - (p.milestone - goal)) / goal);
 
   return (
     <View style={[styles.screen, { backgroundColor: t.bg, paddingTop: insets.top + 12, paddingBottom: insets.bottom + 12 }]}>
@@ -71,12 +73,12 @@ export function SetupScreen(p: Props) {
         </Svg>
         <View style={styles.ringCenter}>
           <Text style={[styles.bigNumber, { color: t.fg }]}>{fmt(p.stepsLeft)}</Text>
-          <Text style={[styles.ringLabel, { color: t.muted }]}>{reached ? "steps for a bonus walk" : "steps to go"}</Text>
+          <Text style={[styles.ringLabel, { color: t.muted }]}>{reached ? `steps to ${milestoneLabel(p.milestone)}` : "steps to go"}</Text>
         </View>
       </View>
 
       <Text style={[styles.sub, { color: t.muted }]}>
-        {fmt(p.settings.doneToday)} of {fmt(goal)} walked today
+        {fmt(p.settings.doneToday)} of {fmt(p.milestone)} walked today
       </Text>
       <View style={styles.pills}>
         <Pill>≈ {km(stepsToMeters(p.stepsLeft, p.strideM))} km</Pill>
@@ -132,11 +134,13 @@ export function SetupScreen(p: Props) {
   );
 }
 
+const yesNo = (v: boolean | null) => (v == null ? "–" : v ? "yes" : "no");
 const num = (v: string) => Number(v.replace(/[^0-9]/g, "")) || 0;
 
 function SettingsSheet(p: Props & { visible: boolean; onClose: () => void }) {
   const s = p.settings;
-  const { privacyOptions } = useAds();
+  const t = useTheme();
+  const ad = useAds();
   return (
     <Sheet visible={p.visible} title="Settings" onClose={p.onClose}>
       <View style={styles.row}>
@@ -161,7 +165,11 @@ function SettingsSheet(p: Props & { visible: boolean; onClose: () => void }) {
           onChangeText={(v) => p.onChange({ ...s, strideCm: num(v) || null })}
         />
       </View>
-      {privacyOptions && <Button kind="soft" title="Ad privacy choices" onPress={showPrivacyChoices} />}
+      {ad.privacyOptions && <Button kind="soft" title="Ad privacy choices" onPress={showPrivacyChoices} />}
+      <Text style={[styles.adStatus, { color: t.muted }]} selectable>
+        Ads: consent {ad.consentStatus ?? "–"} · GDPR {yesNo(ad.gdprApplies)} · can request {yesNo(ad.canRequestAds)}
+        {ad.lastError ? ` · ${ad.lastError}` : ""}
+      </Text>
     </Sheet>
   );
 }
@@ -224,4 +232,5 @@ const styles = StyleSheet.create({
   row: { flexDirection: "row", gap: 12 },
   times: { flexDirection: "row", flexWrap: "wrap", gap: 10 },
   time: { flexGrow: 1, minWidth: "28%" },
+  adStatus: { fontSize: 12, fontFamily: font.body },
 });

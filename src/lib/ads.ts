@@ -23,8 +23,16 @@ export const BANNER_ID: string | null = __DEV__
   ? (ads?.TestIds.ADAPTIVE_BANNER ?? null)
   : (process.env.EXPO_PUBLIC_ADMOB_BANNER_IOS ?? null);
 
-type State = { ready: boolean; privacyOptions: boolean };
-let state: State = { ready: false, privacyOptions: false };
+type State = {
+  ready: boolean;
+  privacyOptions: boolean;
+  // Diagnostics for the Settings sheet, since TestFlight builds show no logs.
+  consentStatus: string | null;
+  gdprApplies: boolean | null;
+  canRequestAds: boolean | null;
+  lastError: string | null;
+};
+let state: State = { ready: false, privacyOptions: false, consentStatus: null, gdprApplies: null, canRequestAds: null, lastError: null };
 const listeners = new Set<(s: State) => void>();
 const set = (next: Partial<State>) => {
   state = { ...state, ...next };
@@ -37,7 +45,13 @@ let initialized = false;
 async function startSdk() {
   if (!ads || initialized) return;
   const info = await ads.AdsConsent.getConsentInfo();
-  set({ privacyOptions: info.privacyOptionsRequirementStatus === ads.AdsConsentPrivacyOptionsRequirementStatus.REQUIRED });
+  const gdprApplies = await ads.AdsConsent.getGdprApplies().catch(() => null);
+  set({
+    privacyOptions: info.privacyOptionsRequirementStatus === ads.AdsConsentPrivacyOptionsRequirementStatus.REQUIRED,
+    consentStatus: info.status,
+    gdprApplies,
+    canRequestAds: info.canRequestAds,
+  });
   if (!info.canRequestAds) return;
   initialized = true;
   await ads.default().initialize();
@@ -54,8 +68,17 @@ export function startAds() {
   ads.AdsConsent.gatherConsent()
     .then(startSdk)
     // On an error, UMP still has the previous session's answer; try with that.
-    .catch(startSdk)
-    .catch(() => {});
+    .catch((e) => {
+      reportError("consent", e);
+      return startSdk();
+    })
+    .catch((e) => reportError("sdk", e));
+}
+
+/** Remember the latest ad or consent failure for the Settings sheet. */
+export function reportError(where: string, e: unknown) {
+  const err = e as { code?: string; message?: string };
+  set({ lastError: `${where}: ${err?.code ?? err?.message ?? String(e)}` });
 }
 
 export async function showPrivacyChoices() {

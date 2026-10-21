@@ -1,7 +1,7 @@
 {
   "configVersion": 0,
   "apple": {
-    "version": "1.0.0",
+    "version": "1.1.0",
     "copyright": "2026 Ari Guðmundsson",
     "categories": [
       "HEALTH_AND_FITNESS",
@@ -45,7 +45,7 @@
           "fitness"
         ],
         "releaseNotes": "First release.",
-        "marketingUrl": "https://github.com/AriFreyrG/just10k",
+        "marketingUrl": "https://arisphere.net",
         "supportUrl": "https://github.com/AriFreyrG/just10k/issues",
         "privacyPolicyUrl": "https://arisphere.net/privacy"
       }

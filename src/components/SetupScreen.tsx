@@ -166,10 +166,13 @@ function SettingsSheet(p: Props & { visible: boolean; onClose: () => void }) {
         />
       </View>
       {ad.privacyOptions && <Button kind="soft" title="Ad privacy choices" onPress={showPrivacyChoices} />}
-      <Text style={[styles.adStatus, { color: t.muted }]} selectable>
-        Ads: consent {ad.consentStatus ?? "–"} · GDPR {yesNo(ad.gdprApplies)} · can request {yesNo(ad.canRequestAds)}
-        {ad.lastError ? ` · ${ad.lastError}` : ""}
-      </Text>
+      {/* Ad diagnostics, for development builds only. */}
+      {__DEV__ && (
+        <Text style={[styles.adStatus, { color: t.muted }]} selectable>
+          Ads: consent {ad.consentStatus ?? "–"} · GDPR {yesNo(ad.gdprApplies)} · can request {yesNo(ad.canRequestAds)}
+          {ad.lastError ? ` · ${ad.lastError}` : ""}
+        </Text>
+      )}
     </Sheet>
   );
 }

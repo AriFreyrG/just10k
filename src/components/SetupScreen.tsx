@@ -3,6 +3,7 @@ import { Pressable, StyleSheet, Text, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import Svg, { Circle } from "react-native-svg";
 import { showPrivacyChoices, useAds } from "../lib/ads";
+import { buyRemoveAds, canPurchase, restoreRemoveAds, usePurchases } from "../lib/purchases";
 import { dayPart } from "../lib/describe";
 import { stepsToMeters, stepsToMinutes } from "../lib/loop";
 import { milestoneLabel, type Settings } from "../lib/settings";
@@ -141,6 +142,7 @@ function SettingsSheet(p: Props & { visible: boolean; onClose: () => void }) {
   const s = p.settings;
   const t = useTheme();
   const ad = useAds();
+  const iap = usePurchases();
   return (
     <Sheet visible={p.visible} title="Settings" onClose={p.onClose}>
       <View style={styles.row}>
@@ -165,7 +167,8 @@ function SettingsSheet(p: Props & { visible: boolean; onClose: () => void }) {
           onChangeText={(v) => p.onChange({ ...s, strideCm: num(v) || null })}
         />
       </View>
-      {ad.privacyOptions && <Button kind="soft" title="Ad privacy choices" onPress={showPrivacyChoices} />}
+      <RemoveAds />
+      {ad.privacyOptions && !iap.adFree && <Button kind="soft" title="Ad privacy choices" onPress={showPrivacyChoices} />}
       {/* Ad diagnostics, for development builds only. */}
       {__DEV__ && (
         <Text style={[styles.adStatus, { color: t.muted }]} selectable>
@@ -174,6 +177,21 @@ function SettingsSheet(p: Props & { visible: boolean; onClose: () => void }) {
         </Text>
       )}
     </Sheet>
+  );
+}
+
+// One payment, ads gone for good. Restore covers a reinstall or a new phone.
+function RemoveAds() {
+  const t = useTheme();
+  const iap = usePurchases();
+  if (!canPurchase) return null;
+  if (iap.adFree) return <Text style={[styles.body, { color: t.muted }]}>Ads removed. Thanks for supporting just10k!</Text>;
+  return (
+    <View style={styles.removeAds}>
+      {iap.price && <Button kind="outline" title={`Remove ads · ${iap.price}`} onPress={buyRemoveAds} busy={iap.busy} />}
+      <Button kind="quiet" title="Restore purchase" onPress={restoreRemoveAds} disabled={iap.busy} />
+      {iap.message && <Text style={[styles.adStatus, { color: t.muted }]}>{iap.message}</Text>}
+    </View>
   );
 }
 
@@ -236,4 +254,5 @@ const styles = StyleSheet.create({
   times: { flexDirection: "row", flexWrap: "wrap", gap: 10 },
   time: { flexGrow: 1, minWidth: "28%" },
   adStatus: { fontSize: 12, fontFamily: font.body },
+  removeAds: { gap: 4 },
 });

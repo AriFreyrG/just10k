@@ -100,6 +100,19 @@ comes from the `EXPO_PUBLIC_ADMOB_BANNER_IOS` EAS environment variable, set for
 `production`. Development builds use Google's test ads; a release build without
 the variable shows no ads.
 
+### Remove ads
+
+A one-time, non-consumable purchase (`com.arifreyrg.just10k.removeads`) turns
+ads off for good. `src/lib/purchases.ts` uses `expo-iap` (StoreKit 2 on iPhone,
+Play Billing on Android). It offers the purchase in Settings and under the
+banner, with **Restore purchase** in Settings, and picks up an existing purchase
+from the store on launch. Once owned, the app remembers it on the phone and
+never starts the ads SDK or shows the consent form. The product has to exist in
+App Store Connect and the Play Console (see `store/listing.md`); until it does,
+only Restore purchase shows. Like the ads SDK, it needs a development or store
+build. To test on iPhone, use a sandbox account or a StoreKit configuration file
+in Xcode.
+
 ## Known limits and next steps
 
 - **Screen-on tracking only.** Expo Go apps can't track location in the

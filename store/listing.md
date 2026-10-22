@@ -38,7 +38,25 @@ When you finish, see the shape of today's loop with your steps, distance and tim
 PRIVATE BY DESIGN
 No account and no tracking. Your step count stays on your phone.
 
+NO ADS, IF YOU LIKE
+The app is free with a small banner after each walk. Pay once to remove ads for good.
+
 Routes are planned with OpenStreetMap data. Map data © OpenStreetMap contributors.
+
+## In-app purchase
+
+Create in App Store Connect › just10k › Monetization › In-App Purchases:
+
+- Type: Non-Consumable
+- Product ID: `com.arifreyrg.just10k.removeads` (must match `REMOVE_ADS_ID` in `src/lib/purchases.ts`)
+- Reference name: Remove ads
+- Display name [35]: Remove ads
+- Description [55]: Turn off ads for good with one payment.
+- Family Sharing: on
+- Review screenshot: the Settings sheet with the Remove ads button
+- Submit it with the next app version (the first IAP must ship with a build).
+
+In the Play Console, add a one-time product with the same ID.
 
 ## Keywords [100]
 

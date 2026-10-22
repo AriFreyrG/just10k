@@ -73,6 +73,14 @@
             "cstr6suwn9.skadnetwork"
           ]
         }
+      ],
+      [
+        "expo-iap",
+        {
+          "android": {
+            "store": "play"
+          }
+        }
       ]
     ],
     "owner": "arifreyrg",

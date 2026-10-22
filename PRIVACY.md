@@ -19,6 +19,8 @@ The app only asks for location while it is open. It does not track your location
 
 **Ads.** After a walk, just10k shows a banner ad from Google AdMob. The ads are not personalized, and the app never asks to track you across other apps, so Google does not use your advertising identifier. To serve and measure ads and to prevent fraud, Google's SDK receives information such as your device type, app version, IP address (and the rough location it implies) and how you interact with the ad. In the EEA, the UK and Switzerland, the app asks for your consent before any ads load, and you can change your choice under Settings › Ad privacy choices. Google's use of this data is covered by its own policy: https://policies.google.com/technologies/partner-sites
 
+**Remove ads.** You can pay once to turn ads off for good. The payment is handled by the App Store or Google Play; just10k never sees your payment details. The app only asks the store whether you own the purchase, and remembers the answer on your phone. Once ads are off, the AdMob SDK is no longer started.
+
 ## Sharing
 
 When you tap Share GPX or Open in Google Maps, the route is handed to the app or service you choose. Nothing is shared unless you do this.

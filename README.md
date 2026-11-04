@@ -29,7 +29,7 @@ for text) live in `src/theme.ts`.
   live step count from the phone's pedometer, a progress bar, and the
   screen kept on. If you go off route, **Re-plan the rest** plans a new
   way home that still adds up to about your goal.
-- **Export.** Open the loop in Google Maps, or share it as a GPX file
+- **Export.** Open the loop in Apple Maps, or share it as a GPX file
   for a Garmin, Strava and so on.
 
 ## Try it on your phone

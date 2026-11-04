@@ -33,7 +33,7 @@ TURN BY TURN
 Walk mode shows the next turn in big type, buzzes before each turn, and counts your steps as you go. The part you've walked fades out. Take a wrong turn and just10k can re-plan a new way home that still adds up to your goal.
 
 YOUR LOOP, SAVED
-When you finish, see the shape of today's loop with your steps, distance and time. Share it as a GPX file for Strava, Garmin and more, or open the route in Google Maps.
+When you finish, see the shape of today's loop with your steps, distance and time. Share it as a GPX file for Strava, Garmin and more, or open the route in Apple Maps.
 
 PRIVATE BY DESIGN
 No account and no tracking. Your step count stays on your phone.

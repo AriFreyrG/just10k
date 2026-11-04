@@ -27,7 +27,7 @@ SHOTS = [
     ("4-done.png", ["See the shape", "of today's walk"], "Share it as GPX to Strava or Garmin", GROUND, INK),
 ]
 
-# The "Google Maps · Share GPX · Simulate walk" row on the pick screen:
+# The "Apple Maps · Share GPX · Simulate walk" row on the pick screen:
 # "Simulate walk" only exists in development builds, so blank the row out.
 BLANK = {"2-pick.png": (0, 2590, W, 2725)}
 ISLAND = (472, 42, 848, 151)  # iPhone 17 Pro Max, in 1320x2868 screenshot pixels

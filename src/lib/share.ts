@@ -4,16 +4,21 @@ import * as Sharing from "expo-sharing";
 import { toGpx, type LatLon, type PlannedRoute } from "./loop";
 import { today } from "./settings";
 
-export function openInGoogleMaps(start: LatLon, route: PlannedRoute) {
-  const ll = (p: LatLon) => `${p[0].toFixed(6)},${p[1].toFixed(6)}`;
+const ll = (p: LatLon) => `${p[0].toFixed(6)},${p[1].toFixed(6)}`;
+
+// Open the loop as walking directions in Apple Maps, the built-in iOS map app.
+export function appleMapsUrl(start: LatLon, route: PlannedRoute) {
   const q = [
-    "api=1",
-    `origin=${ll(start)}`,
+    `source=${ll(start)}`,
     `destination=${ll(start)}`,
-    `waypoints=${encodeURIComponent(route.waypoints.map(ll).join("|"))}`,
-    "travelmode=walking",
+    ...route.waypoints.map((w) => `waypoint=${ll(w)}`),
+    "mode=walking",
   ].join("&");
-  return Linking.openURL(`https://www.google.com/maps/dir/?${q}`);
+  return `https://maps.apple.com/directions?${q}`;
+}
+
+export function openInAppleMaps(start: LatLon, route: PlannedRoute) {
+  return Linking.openURL(appleMapsUrl(start, route));
 }
 
 // Share the loop as a GPX file, e.g. to load onto a Garmin or into Strava.

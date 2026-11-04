@@ -23,7 +23,7 @@ The app only asks for location while it is open. It does not track your location
 
 ## Sharing
 
-When you tap Share GPX or Open in Google Maps, the route is handed to the app or service you choose. Nothing is shared unless you do this.
+When you tap Share GPX or Open in Apple Maps, the route is handed to the app or service you choose. Nothing is shared unless you do this.
 
 ## Children
 

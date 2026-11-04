@@ -3,7 +3,7 @@ import { ScrollView, StyleSheet, Text, useWindowDimensions, View, type LayoutCha
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { loopName, loopTags } from "../lib/describe";
 import { metersToSteps, stepsToMinutes, type LatLon, type PlannedRoute } from "../lib/loop";
-import { openInGoogleMaps, shareGpx } from "../lib/share";
+import { openInAppleMaps, shareGpx } from "../lib/share";
 import { fmt, font, km, useTheme } from "../theme";
 import { Button, Icon, Pill, RoundButton } from "./ui";
 
@@ -99,7 +99,7 @@ export function PickOverlay(p: Props) {
             <Button title="Start walk" onPress={() => p.onStart(false)} style={{ flex: 1 }} />
           </View>
           <View style={styles.links}>
-            <Button kind="quiet" title="Google Maps" onPress={() => openInGoogleMaps(p.start, sel)} />
+            <Button kind="quiet" title="Apple Maps" onPress={() => openInAppleMaps(p.start, sel)} />
             <Button kind="quiet" title="Share GPX" onPress={() => shareGpx(sel)} />
             {__DEV__ && <Button kind="quiet" title="Simulate walk" onPress={() => p.onStart(true)} />}
           </View>
@@ -142,7 +142,7 @@ const styles = StyleSheet.create({
   grabber: { width: 40, height: 5, borderRadius: 3, alignSelf: "center", marginBottom: 18 },
   card: { paddingHorizontal: 24, gap: 18 },
   name: { fontFamily: font.display, fontSize: 28, letterSpacing: -0.6 },
-  tags: { flexDirection: "row", flexWrap: "wrap", gap: 8, marginTop: -8 },
+  tags: { flexDirection: "row", gap: 8, marginTop: -8 },
   stats: { flexDirection: "row", gap: 8 },
   statValue: { fontFamily: font.display, fontSize: 24, fontVariant: ["tabular-nums"] },
   statLabel: { fontSize: 13, fontFamily: font.body },

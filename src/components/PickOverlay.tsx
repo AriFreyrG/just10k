@@ -1,9 +1,9 @@
 import { useEffect, useRef } from "react";
-import { ScrollView, StyleSheet, Text, useWindowDimensions, View, type LayoutChangeEvent, type ScrollViewInstance } from "react-native";
+import { Platform, ScrollView, StyleSheet, Text, useWindowDimensions, View, type LayoutChangeEvent, type ScrollViewInstance } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { loopName, loopTags } from "../lib/describe";
 import { metersToSteps, stepsToMinutes, type LatLon, type PlannedRoute } from "../lib/loop";
-import { openInGoogleMaps, shareGpx } from "../lib/share";
+import { openInAppleMaps, openInGoogleMaps, shareGpx } from "../lib/share";
 import { fmt, font, km, useTheme } from "../theme";
 import { Button, Icon, Pill, RoundButton } from "./ui";
 
@@ -99,6 +99,9 @@ export function PickOverlay(p: Props) {
             <Button title="Start walk" onPress={() => p.onStart(false)} style={{ flex: 1 }} />
           </View>
           <View style={styles.links}>
+            {Platform.OS === "ios" && (
+              <Button kind="quiet" title="Apple Maps" onPress={() => openInAppleMaps(p.start, sel)} />
+            )}
             <Button kind="quiet" title="Google Maps" onPress={() => openInGoogleMaps(p.start, sel)} />
             <Button kind="quiet" title="Share GPX" onPress={() => shareGpx(sel)} />
             {__DEV__ && <Button kind="quiet" title="Simulate walk" onPress={() => p.onStart(true)} />}
@@ -151,6 +154,6 @@ const styles = StyleSheet.create({
   dot: { width: 6, height: 6, borderRadius: 3 },
   row: { flexDirection: "row", gap: 10 },
   shuffle: { width: 58, height: 58, paddingHorizontal: 0, gap: 0 },
-  links: { flexDirection: "row", justifyContent: "center", marginTop: -6 },
+  links: { flexDirection: "row", flexWrap: "wrap", justifyContent: "center", marginTop: -6 },
   credit: { fontSize: 11, fontFamily: font.body, textAlign: "center", marginTop: -10 },
 });

@@ -4,8 +4,24 @@ import * as Sharing from "expo-sharing";
 import { toGpx, type LatLon, type PlannedRoute } from "./loop";
 import { today } from "./settings";
 
+const ll = (p: LatLon) => `${p[0].toFixed(6)},${p[1].toFixed(6)}`;
+
+// Apple Maps, the built-in iOS map app. App Review asks for this option (guideline 4).
+export function appleMapsUrl(start: LatLon, route: PlannedRoute) {
+  const q = [
+    `source=${ll(start)}`,
+    `destination=${ll(start)}`,
+    ...route.waypoints.map((w) => `waypoint=${ll(w)}`),
+    "mode=walking",
+  ].join("&");
+  return `https://maps.apple.com/directions?${q}`;
+}
+
+export function openInAppleMaps(start: LatLon, route: PlannedRoute) {
+  return Linking.openURL(appleMapsUrl(start, route));
+}
+
 export function openInGoogleMaps(start: LatLon, route: PlannedRoute) {
-  const ll = (p: LatLon) => `${p[0].toFixed(6)},${p[1].toFixed(6)}`;
   const q = [
     "api=1",
     `origin=${ll(start)}`,

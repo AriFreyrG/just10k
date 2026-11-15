@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
+import { Platform } from "react-native";
 import Constants, { ExecutionEnvironment } from "expo-constants";
 
-// Google AdMob, non-personalized only. The SDK has native code that Expo Go
-// doesn't include, so load it only in real builds and do nothing elsewhere.
+// Google AdMob. Ads are personalized only when the person allows tracking in
+// Apple's App Tracking Transparency prompt, otherwise non-personalized.
+// The SDK has native code that Expo Go doesn't include, so load it only in real builds and do nothing elsewhere.
 type Ads = typeof import("react-native-google-mobile-ads");
 
 function load(): Ads | null {
@@ -30,9 +32,11 @@ type State = {
   consentStatus: string | null;
   gdprApplies: boolean | null;
   canRequestAds: boolean | null;
+  // True only after the person allowed tracking in the ATT prompt.
+  personalized: boolean;
   lastError: string | null;
 };
-let state: State = { ready: false, privacyOptions: false, consentStatus: null, gdprApplies: null, canRequestAds: null, lastError: null };
+let state: State = { ready: false, privacyOptions: false, consentStatus: null, gdprApplies: null, canRequestAds: null, personalized: false, lastError: null };
 const listeners = new Set<(s: State) => void>();
 const set = (next: Partial<State>) => {
   state = { ...state, ...next };
@@ -41,6 +45,22 @@ const set = (next: Partial<State>) => {
 
 let started = false;
 let initialized = false;
+
+// Apple's App Tracking Transparency prompt. Asked once, after Google's consent
+// form (if any) and before the SDK starts, so no ad loads before the answer.
+async function askTracking(): Promise<boolean> {
+  if (Platform.OS !== "ios") return false;
+  try {
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
+    const att = require("expo-tracking-transparency") as typeof import("expo-tracking-transparency");
+    if (!att.isAvailable()) return false;
+    const { granted } = await att.requestTrackingPermissionsAsync();
+    return granted;
+  } catch (e) {
+    reportError("tracking", e);
+    return false;
+  }
+}
 
 async function startSdk() {
   if (!ads || initialized) return;
@@ -54,6 +74,7 @@ async function startSdk() {
   });
   if (!info.canRequestAds) return;
   initialized = true;
+  set({ personalized: await askTracking() });
   await ads.default().initialize();
   set({ ready: true });
 }

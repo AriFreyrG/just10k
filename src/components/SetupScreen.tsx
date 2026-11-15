@@ -172,7 +172,7 @@ function SettingsSheet(p: Props & { visible: boolean; onClose: () => void }) {
       {/* Ad diagnostics, for development builds only. */}
       {__DEV__ && (
         <Text style={[styles.adStatus, { color: t.muted }]} selectable>
-          Ads: consent {ad.consentStatus ?? "–"} · GDPR {yesNo(ad.gdprApplies)} · can request {yesNo(ad.canRequestAds)}
+          Ads: consent {ad.consentStatus ?? "–"} · GDPR {yesNo(ad.gdprApplies)} · can request {yesNo(ad.canRequestAds)} · tracking {yesNo(ad.personalized)}
           {ad.lastError ? ` · ${ad.lastError}` : ""}
         </Text>
       )}

@@ -36,7 +36,7 @@ YOUR LOOP, SAVED
 When you finish, see the shape of today's loop with your steps, distance and time. Share it as a GPX file for Strava, Garmin and more, or open the route in Apple Maps.
 
 PRIVATE BY DESIGN
-No account and no tracking. Your step count stays on your phone.
+No account needed. Your step count stays on your phone.
 
 NO ADS, IF YOU LIKE
 The app is free with a small banner after each walk. Pay once to remove ads for good.
@@ -83,7 +83,7 @@ Secondary: Navigation
 
 ## App Privacy (draft — confirm before submitting)
 
-- Data linked to you: none. No tracking (non-personalized ads, no App Tracking Transparency prompt).
+- Data linked to you: none. Tracking: only Google AdMob data, and only if the person allows it in the App Tracking Transparency prompt (shown at launch, before any ad loads).
 - Location — Precise Location, used for App Functionality, not linked to identity, not used for tracking.
   Your start point and the route points are sent to the routing server
   (routing.openstreetmap.de) to plan a loop, and an address you type is sent
@@ -91,8 +91,9 @@ Secondary: Navigation
 - Health & Fitness (step count): read on device only, never sent anywhere,
   so it doesn't need declaring.
 - Google AdMob (banner on the Done screen), for Third-Party Advertising, not
-  linked to identity, not used for tracking: Coarse Location (from IP), Device ID
-  (identifier for vendor, used for frequency capping and fraud), Product
+  linked to identity, used for tracking (behind the ATT prompt): Coarse Location (from IP), Device ID
+  (advertising identifier when tracking is allowed, identifier for vendor
+  for frequency capping and fraud), Product
   Interaction, Advertising Data, and Crash/Performance Data. Check against
   Google's current list before submitting:
   https://developers.google.com/admob/ios/privacy/data-disclosure

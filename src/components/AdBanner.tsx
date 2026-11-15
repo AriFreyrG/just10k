@@ -4,11 +4,11 @@ import { ads, BANNER_ID, reportError, useAds } from "../lib/ads";
 import { buyRemoveAds, canPurchase, usePurchases } from "../lib/purchases";
 import { font, useTheme } from "../theme";
 
-// A non-personalized adaptive banner. Renders nothing until consent is settled,
-// in Expo Go, when there's no ad unit or ads were paid off, and collapses if no ad fills.
+// An adaptive banner, personalized only if the person allowed tracking. Renders
+// nothing until consent is settled, in Expo Go, when there's no ad unit or ads were paid off, and collapses if no ad fills.
 export function AdBanner() {
   const t = useTheme();
-  const { ready } = useAds();
+  const { ready, personalized } = useAds();
   const iap = usePurchases();
   const [failed, setFailed] = useState(false);
   const [width, setWidth] = useState(0);
@@ -23,7 +23,7 @@ export function AdBanner() {
             unitId={BANNER_ID}
             size={BannerAdSize.LARGE_ANCHORED_ADAPTIVE_BANNER}
             width={width}
-            requestOptions={{ requestNonPersonalizedAdsOnly: true }}
+            requestOptions={{ requestNonPersonalizedAdsOnly: !personalized }}
             onAdFailedToLoad={(e) => {
               reportError("banner", e);
               setFailed(true);

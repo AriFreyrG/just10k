@@ -81,6 +81,12 @@
             "store": "play"
           }
         }
+      ],
+      [
+        "expo-tracking-transparency",
+        {
+          "userTrackingPermission": "just10k shows one small ad after a walk. Allowing this lets Google show ads that fit you better. The app works the same either way."
+        }
       ]
     ],
     "owner": "arifreyrg",

@@ -89,9 +89,10 @@ app should self-host OSRM/GraphHopper or use a paid provider.
 
 ## Ads
 
-A non-personalized Google AdMob banner shows on the Done screen (never during a
-walk). `src/lib/ads.ts` runs Google's consent form where the law needs it, then
-starts the SDK. The SDK needs a development or store build; in Expo Go the app
+A Google AdMob banner shows on the Done screen (never during a walk).
+`src/lib/ads.ts` runs Google's consent form where the law needs it, then on iOS
+shows Apple's App Tracking Transparency prompt, then starts the SDK. Ads are
+personalized only if the person allows tracking. The SDK needs a development or store build; in Expo Go the app
 runs without ads.
 
 The iOS AdMob app ID is in the `react-native-google-mobile-ads` plugin in
